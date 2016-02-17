@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="iotDashboardApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/img/favicon.ico">
+    	
+	<title>IoT Dashboard</title>
+
+	<link rel="stylesheet"
+		href="/webjars/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" 
+		href="/css/angular-clock.css">
+	<link rel="stylesheet" 
+		href="/css/app.css">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand">Freiwillige Feuerwehr Burgebrach</a>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="view-container">
+		<div ng-view class="view-frame"></div>
+	</div>
+
+<script src="/webjars/angularjs/1.4.9/angular.js"></script>
+<script src="/webjars/angularjs/1.4.9/angular-route.js"></script>
+<script src="/webjars/angularjs/1.4.9/angular-sanitize.js"></script>
+<script src="/webjars/angularjs/1.4.9/angular-resource.js"></script>
+<script src="/lib/mqttws31.js"></script>
+<script src="/lib/angular-clock.js"></script>
+
+<script src="/js/controllers.js"></script>
+<script src="/js/filters.js"></script>
+<script src="/js/services.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+body {
+  padding-top: 50px;
+}
+
+h1 {
+	font-size: 36pt;
+	margin-bottom: 50px;
+}
+
+.row {
+	border-bottom: 1px solid black;
+}
+
+.information {
+}
+
+.info {
+	font-size: 24pt;
+	margin-top: 5px;
+	border-top: 1px solid black;
+}
+
+.page-indicator {
+	text-align: right;
+	border-top: 1px solid black;
+}
+
+.room {
+	font-size: 24pt;
+	height: 50%;		
+	border-top: 1px solid black;
+	margin-top: 20px;
+}
+
+.room h2 {
+	font-weight: bold;
+	font-size: 24pt;
+	margin-bottom: 10px;
+}
+
+.clock {
+	/**
+	position: relative;
+	float: right;
+	width: 300px;
+	height: 300px;
+	**/
+	padding: 50px;
+}

@@ -1,0 +1,32 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="information col-md-4" ng-controller="InformationDashboardController">
+			<h1>Termine und Informationen</h1>
+			<div ng-repeat="info in information | page:currentPage:pageSize | limitTo:pageSize"
+				 class="info">
+				<p ng-bind-html="info.text"></p>
+			</div>
+			<div class="info" ng-show="information.length === 0">
+				Zur Zeit gibt es keine Informationen.
+			</div>
+			<div class="page-indicator" ng-show="pageCount > 1">
+				Seite {{currentPage + 1}} von {{pageCount}}
+			</div>
+		</div>
+		<div class="room-schedule col-md-4" ng-controller="RoomScheduleController">
+			<h1>Raumbelegung</h1>
+			<div ng-repeat="room in rooms" class="room"">
+				<h2>{{room.name}}:</h2>
+				<div ng-bind-html="room.text"></div>
+			</div>
+			<div class="room" ng-show="rooms.length === 0">
+				Die Schulungsräume sind heute nicht belegt.
+			</div>	
+		</div>
+		<div class="col-md-4">
+			<div class="clock">
+				<ds-widget-clock show-analog></ds-widget-clock>
+			</div>
+		</div>
+	</div>
+</div>
