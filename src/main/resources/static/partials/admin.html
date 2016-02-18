@@ -1,17 +1,37 @@
-<div class="container-fluid row">
+<div class="container-fluid">
 	<h1>ADMIN</h1>
-	<div class="col-md-6">
-		<h2>Information</h2>
-		<textarea ng-model="information" cols="80" rows="20" ng-trim="true"></textarea>
-		<p><button ng-click="publishInformation()">Sende Informationen</button></p>
+	<div class="row">
+		<div class="col-md-6">
+			<h2>Termine und Information</h2>
+			<form>
+				<div class="form-group">
+					<textarea class="form-control" rows="20" ng-model="information" ng-trim="true"></textarea>
+				</div>
+				<p class="help-block">Jede Zeile wird als eigener Info-Punkt angezeigt.</p>
+				<button class="btn btn-default" ng-click="publishInformation()">Sende Informationen</button>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<h2>Raumbelegung</h2>
+			<form>
+				<div class="form-group">
+					<label>Schulung 1:</label>
+					<input type="text" class="form-control" ng-model="room1" ng-trim="true"></input>
+				</div>
+				<div class="form-group">
+					<label>Schulung 2:</label>
+					<input type="text" class="form-control" ng-model="room2" ng-trim="true"></input>
+				</div>
+				<button class="btn btn-default" ng-click="publishRoomSchedule()">Sende Raumbelegung</button>
+			</form>
+		</div>
 	</div>
-	<div class="col-md-6">
-		<h2>Raumbelegung</h2>
-		<p>Schulung 1:</p>
-		<textarea ng-model="room1" cols="80" rows="3" ng-trim="true"></textarea>
-		<p>Schulung 2:</p>
-		<textarea ng-model="room2" cols="80" rows="3" ng-trim="true"></textarea>
-		<p><button ng-click="publishRoomSchedule()">Sende Raumbelegung</button><p>
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Fernsteuerung</h2>
+			<form>
+				<button class="btn btn-primary" ng-click="reloadDashboards()">Dashboards neu laden</button>
+			</form>
+		</div>
 	</div>
 </div>
-<button ng-click="reloadDashboards()">Dashboards neu laden</button>
