@@ -68,12 +68,18 @@
 	}]);
 	
 	controllers.controller('AdminController', ['$scope', 'ida.state', 'ida.remote', function($scope, state, remote) {
-		$scope.information = "[]";
+		$scope.information = "";
 		$scope.room1 = "";
 		$scope.room2 = "";
 		
 		$scope.publishInformation = function() {
-			state.setInformation(JSON.parse($scope.information));
+			var lines = $scope.information.trim().split('\n');
+			var information = [];
+			for (var i in lines) {
+				if (lines[i] === '') continue;
+				information.push({text: lines[i]});
+			}
+			state.setInformation(information);
 		};
 		
 		$scope.publishRoomSchedule = function() {
