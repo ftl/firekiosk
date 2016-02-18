@@ -76,8 +76,16 @@
 			var lines = $scope.information.trim().split('\n');
 			var information = [];
 			for (var i in lines) {
-				if (lines[i] === '') continue;
-				information.push({text: lines[i]});
+				var line = lines[i];
+				if (line === '') continue;
+
+				var info;
+				if (line.startsWith('!')) {
+					info = {text: line.substr(1), label: '!'}
+				} else {
+					info = {text: line};
+				}
+				information.push(info);
 			}
 			state.setInformation(information);
 		};

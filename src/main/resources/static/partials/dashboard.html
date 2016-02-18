@@ -4,7 +4,8 @@
 			<h1>Termine und Informationen</h1>
 			<div ng-repeat="info in information | page:currentPage:pageSize | limitTo:pageSize"
 				 class="info">
-				<div ng-bind-html="info.text"></div>
+				<img src="/img/achtung.png" alt="Achtung" ng-show="info.label === '!'">
+				<span ng-bind-html="info.text"></span>
 			</div>
 			<div class="info" ng-show="information.length === 0">
 				Zur Zeit gibt es keine Informationen.
