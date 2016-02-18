@@ -44,22 +44,41 @@
 		};
 	}]);
 	
-	services.factory('ida.mqtt', ['$rootScope', function($rootScope) {
+	services.factory('ida.mqtt', ['$rootScope', '$location', function($rootScope, $location) {
 		var connected = false;
 		var pendingSubscriptions = [];
-		var pahoClient = new Paho.MQTT.Client("127.0.0.1", Number(18830), "/iotDashboard", "ida" + Date.now());
+		var pahoClient;
 		
-		pahoClient.onMessageArrived = function(message) {
-			console.log("onMessageArrived " + message.destinationName);
-			$rootScope.$broadcast(message.destinationName, message);
-		}
-		
-		pahoClient.onConnectionLost = function(responseObject) {
-			if (responseObject !== 0) {
-				console.log("onConnectionLost: " + responseObject.errorMessage);
+		function connect(hostname) {
+			console.log("Connecting to MQTT broker on " + hostname);
+			var client = new Paho.MQTT.Client(hostname, Number(18830), "/iotDashboard", "ida" + Date.now());
+			
+			client.onMessageArrived = function(message) {
+				console.log("onMessageArrived " + message.destinationName);
+				$rootScope.$broadcast(message.destinationName, message);
 			}
-			connected = false;
-		};
+			
+			client.onConnectionLost = function(responseObject) {
+				if (responseObject !== 0) {
+					console.log("onConnectionLost: " + responseObject.errorMessage);
+				}
+				connected = false;
+			};
+
+			client.connect({
+				onSuccess: function() {
+					console.log("Connected to MQTT broker.")
+					connected = true;
+					applyPendingSubscriptions();
+				}, 
+				onFailure: function() {
+					console.log("Cannot connect to MQTT broker.");
+					connected = false;
+				}
+			});
+			
+			return client;
+		}
 
 		function addPendingSubscription(filter, options) {
 			pendingSubscriptions.push({filter: filter, options: options});
@@ -74,18 +93,7 @@
 			pendingSubscriptions = [];
 		}
 
-		pahoClient.connect({
-			onSuccess: function() {
-				console.log("Connected to Mosquitto broker.")
-				connected = true;
-				applyPendingSubscriptions();
-			}, 
-			onFailure: function() {
-				console.log("Cannot connect to Mosquitto broker.");
-				connected = false;
-			}
-		});
-
+		pahoClient = connect($location.host());
 		return {
 			subscribe: function(filter, options) {
 				if (!connected) {
