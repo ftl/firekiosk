@@ -23,6 +23,7 @@ dependencies {
 	compile 'org.webjars:angularjs:1.4.9'
 	compile 'org.webjars.bower:angular-ui-bootstrap-bower:1.1.2'
 	compile 'org.webjars.bower:jasmine:2.4.1'
+	compile 'org.webjars:leaflet:0.7.7'
 	
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
