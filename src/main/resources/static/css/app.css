@@ -1,3 +1,7 @@
+html, body, .view-container, .view-frame, .container-fluid, .container {
+	height: 100%;
+}
+
 body {
   padding-top: 50px;
 }
@@ -8,28 +12,41 @@ h1 {
 }
 
 .row {
+}
+
+.information-root {
+	height: 100%;
 	border-bottom: 1px solid black;
 }
 
 .information {
+	height: 100%;
+	overflow: hidden;
 }
 
 .info {
 	font-size: 24pt;
 	margin-top: 5px;
 	border-top: 1px solid black;
+	padding-top: 5px;
 }
 
 .page-indicator {
 	text-align: right;
+	margin-top: 5px;
 	border-top: 1px solid black;
+}
+
+.roomSchedule {
+	height: 100%;
+	overflow: hidden;
 }
 
 .room {
 	font-size: 24pt;
-	height: 50%;		
 	border-top: 1px solid black;
 	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .room h2 {
@@ -39,11 +56,5 @@ h1 {
 }
 
 .clock {
-	/**
-	position: relative;
-	float: right;
-	width: 300px;
-	height: 300px;
-	**/
 	padding: 50px;
 }
