@@ -44,14 +44,14 @@
 		};
 	}]);
 	
-	services.factory('ida.mqtt', ['$rootScope', '$location', function($rootScope, $location) {
+	services.factory('ida.mqtt', ['$rootScope', '$location', '$http', function($rootScope, $location, $http) {
 		var connected = false;
 		var pendingSubscriptions = [];
 		var pahoClient;
 		
-		function connect(hostname) {
-			console.log("Connecting to MQTT broker on " + hostname);
-			var client = new Paho.MQTT.Client(hostname, Number(18830), "/iotDashboard", "ida" + Date.now());
+		function connect(hostname, port, path) {
+			console.log("Connecting to MQTT broker on " + hostname + " port " + port + " path " + path);
+			var client = new Paho.MQTT.Client(hostname, Number(port), path, "ida" + Date.now());
 			
 			client.onMessageArrived = function(message) {
 				console.log("onMessageArrived " + message.destinationName);
@@ -93,7 +93,24 @@
 			pendingSubscriptions = [];
 		}
 
-		pahoClient = connect($location.host());
+		
+		$http({
+			method: 'GET',
+			url: '/mqtt.conf'
+		})
+		.then(
+			function onSuccess(response) {
+				console.log("Found mqtt.conf");
+				console.log(response.data);
+				pahoClient = connect(response.data.hostname, response.data.port, response.data.path);
+			}, 
+			function onError(response) {
+				console.log("Cannot find mqtt.conf, using defaults.")
+				console.log(response);
+				pahoClient = connect($location.host(), 18830, "/iotDashboard");
+			}
+		);
+		
 		return {
 			subscribe: function(filter, options) {
 				if (!connected) {
