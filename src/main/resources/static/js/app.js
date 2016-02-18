@@ -14,6 +14,10 @@
 				templateUrl: '/partials/dashboard.html',
 				controller: 'DashboardController'
 			})
+			.when('/alarm', {
+				templateUrl: '/partials/alarm_telegram.html',
+				controller: 'AlarmTelegramController'
+			})
 			.when('/admin', {
 				templateUrl: '/partials/admin.html',
 				controller: 'AdminController'

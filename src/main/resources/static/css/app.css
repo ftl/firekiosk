@@ -58,3 +58,7 @@ h1 {
 .clock {
 	padding: 50px;
 }
+
+.map {
+	height: 100%;
+}

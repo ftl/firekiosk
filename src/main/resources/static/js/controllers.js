@@ -2,9 +2,13 @@
 	'use strict';
 	var controllers = angular.module('idaControllers', ['ngSanitize']);
 	
-	controllers.controller('DashboardController', ['$scope', '$window', 'ida.remote', function($scope, $window, remote) {
+	controllers.controller('DashboardController', ['$scope', '$window', '$location', 'ida.remote', 'ida.alarm', function($scope, $window, $location, remote, alarm) {
 		$scope.$on('ida.reloadDashboards', function(event) {
 			$window.location.reload();
+		});
+		
+		$scope.$on('ida.alarm', function(event, telegram) {
+			$location.path("/alarm");
 		});
 	}]);
 	
@@ -67,7 +71,28 @@
 		});
 	}]);
 	
-	controllers.controller('AdminController', ['$scope', 'ida.state', 'ida.remote', function($scope, state, remote) {
+	controllers.controller('AlarmTelegramController', ['$scope', 'ida.alarm', function($scope, alarm) {
+		var telegram = alarm.current();
+		$scope.keyword = telegram.keyword;
+		$scope.address = telegram.address;
+		$scope.additionalInformation = telegram.additionalInformation;
+		
+		if (telegram.lat === undefined || telegram.lon === undefined) {
+			telegram.lat = 49.826302;
+			telegram.lon = 10.735984;
+		}
+		
+		var map = L.map('map').setView([telegram.lat, telegram.lon], 17);
+		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		    maxZoom: 18
+		}).addTo(map);
+		L.tileLayer('http://openfiremap.org/hytiles/{z}/{x}/{y}.png', {
+			maxZoom: 18
+		}).addTo(map);
+		var marker = L.marker([telegram.lat, telegram.lon]).addTo(map);
+	}]);
+	
+	controllers.controller('AdminController', ['$scope', 'ida.state', 'ida.remote', 'ida.alarm', function($scope, state, remote, alarm) {
 		$scope.information = "";
 		$scope.room1 = "";
 		$scope.room2 = "";
@@ -103,6 +128,10 @@
 		
 		$scope.reloadDashboards = function() {
 			remote.reloadDashboards();
+		}
+		
+		$scope.triggerAlarm = function() {
+			alarm.triggerAlarm({lat: 49.826302, lon: 10.735984, keyword: "B4 Person", address: "Steigerwaldstraße 13, Burgebrach", additionalInformation: ""});
 		}
 	}]);
 })();

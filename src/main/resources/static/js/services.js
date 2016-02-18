@@ -32,16 +32,39 @@
 	}]);
 	
 	services.factory('ida.remote', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
-		mqtt.subscribe('/ida/remote/reloadDashboards');
-		$rootScope.$on('/ida/remote/reloadDashboards', function(event, message) {
-			$rootScope.$broadcast('ida.reloadDashboards');
-		})
+		handle('/ida/remote/reloadDashboards', 'ida.reloadDashboards');
+		
+		function handle(destinationPath, name) {
+			mqtt.subscribe(destinationPath);
+			$rootScope.$on(destinationPath, function(event, message) {
+				$rootScope.$broadcast(name, JSON.parse(message.payloadString));
+			});
+		}
 		
 		return {
 			reloadDashboards: function() {
 				mqtt.send('/ida/remote/reloadDashboards', 'now ' + Date.now());
 			}
 		};
+	}]);
+	
+	services.factory('ida.alarm', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
+		var alarmTelegram = {};
+		
+		mqtt.subscribe('/ida/alarm');
+		$rootScope.$on('/ida/alarm', function(event, message) {
+			alarmTelegram = JSON.parse(message.payloadString);
+			$rootScope.$broadcast('ida.alarm', alarmTelegram);
+		});
+		
+		return {
+			current: function() {
+				return alarmTelegram;
+			},
+			triggerAlarm: function(telegram) {
+				mqtt.send('/ida/alarm', JSON.stringify(telegram));
+			}
+		}
 	}]);
 	
 	services.factory('ida.mqtt', ['$rootScope', '$location', '$http', function($rootScope, $location, $http) {
