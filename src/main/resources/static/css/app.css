@@ -59,6 +59,10 @@ h1 {
 	padding: 50px;
 }
 
+.alarm-telegram-root {
+	height: 100%;
+}
+
 .map {
 	height: 100%;
 }

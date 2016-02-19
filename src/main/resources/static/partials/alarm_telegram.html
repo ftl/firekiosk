@@ -1,21 +1,24 @@
 <div class="container-fluid">
-	<div class="col-md-4">
-		<h1>Alarm!</h1>
-		<form>
-			<div class="form-group">
-				<label>Stichwort:</label>
-				<input type="text" class="form-control" ng-model="keyword">
-			</div>
-			<div class="form-group">
-				<label>Adresse:</label>
-				<textarea type="text" class="form-control" rows="3" ng-model="address"></textarea>
-			</div>
-			<div class="form-group">
-				<label>Zusatzinformationen:</label>
-				<textarea type="text" class="form-control" rows="5" ng-model="additionalInformation"></textarea>
-			</div>
-		</form>
-	</div>
-	<div class="map col-md-8" id="map">
+	<div class="row alarm-telegram-root">
+		<div class="col-md-4">
+			<h1>Alarm!</h1>
+			<form>
+				<div class="form-group">
+					<label>Stichwort:</label> <input type="text" class="form-control"
+						ng-model="keyword">
+				</div>
+				<div class="form-group">
+					<label>Adresse:</label>
+					<textarea type="text" class="form-control" rows="3"
+						ng-model="address"></textarea>
+				</div>
+				<div class="form-group">
+					<label>Zusatzinformationen:</label>
+					<textarea type="text" class="form-control" rows="5"
+						ng-model="additionalInformation"></textarea>
+				</div>
+			</form>
+		</div>
+		<div class="map col-md-8" id="map"></div>
 	</div>
 </div>
