@@ -125,8 +125,27 @@
 		initMap();
 		showTelegram(alarm.current());
 	}]);
+	
+	controllers.controller('AlarmInputController', ['$scope', 'ida.switchPage', 'ida.alarm', function($scope, switchPage, alarm) {
+		$scope.keyword = "";
+		$scope.address = "";
+		$scope.additionalInformation = "";
+		
+		$scope.triggerAlarm = function() {
+			alarm.triggerAlarm({ 
+				keyword: $scope.keyword, 
+				address: $scope.address, 
+				additionalInformation: $scope.additionalInformation 
+			});
+			switchPage.toAdmin();
+		};
+		
+		$scope.cancel = function() {
+			switchPage.toAdmin();
+		};
+	}]);
 
-	controllers.controller('AdminController', ['$scope', 'ida.state', 'ida.remote', 'ida.alarm', function($scope, state, remote, alarm) {
+	controllers.controller('AdminController', ['$scope', 'ida.switchPage', 'ida.state', 'ida.remote', 'ida.alarm', function($scope, switchPage, state, remote, alarm) {
 		$scope.information = "";
 		$scope.room1 = "";
 		$scope.room2 = "";
@@ -165,7 +184,8 @@
 		};
 
 		$scope.triggerAlarm = function() {
-			alarm.triggerAlarm({lat: 49.826302, lon: 10.735984, keyword: "B4 Person", address: "Steigerwaldstraße 13, Burgebrach", additionalInformation: ""});
+//			alarm.triggerAlarm({lat: 49.826302, lon: 10.735984, keyword: "B4 Person", address: "Steigerwaldstraße 13, Burgebrach", additionalInformation: ""});
+			switchPage.toAlarmInput();
 		};
 
 		$scope.resetAlarm = function() {

@@ -4,6 +4,7 @@
 
 	services.factory('ida.switchPage', ['$location', function($location) {
 		function switchToPage(page) {
+			console.log("Switch to " + page);
 			$location.path(page);
 		}
 		
@@ -13,6 +14,9 @@
 			},
 			toAlarmTelegram: function() {
 				switchToPage("/alarm");
+			},
+			toAlarmInput: function() {
+				switchToPage("/alarm_input")
 			},
 			toAdmin: function() {
 				switchToPage("/admin");

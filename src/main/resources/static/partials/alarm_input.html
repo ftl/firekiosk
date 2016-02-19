@@ -1,0 +1,26 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+			<h1>Alarm</h1>
+			<div class="panel panel-default">
+				<div class="panel-heading">Alarm-Telegram</div>
+				<form class="panel-body">
+					<div class="form-group">
+						<label>Stichwort</label>
+						<input type="text" class="form-control" ng-model="keyword">
+					</div>
+					<div class="form-group">
+						<label>Adresse</label>
+						<input type="text" class="form-control" ng-model="address">
+					</div>
+					<div class="form-group">
+						<label>Zusätzliche Informationen</label>
+						<textarea type="text" class="form-control" rows="5" ng-model="additionalInformation"></textarea>
+					</div>
+					<button class="btn btn-primary" ng-click="triggerAlarm()">Alarm auslösen</button>
+					<button class="btn btn-default" ng-click="cancel()">Abbrechen</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

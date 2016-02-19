@@ -18,6 +18,10 @@
 				templateUrl: '/partials/alarm_telegram.html',
 				controller: 'AlarmTelegramController'
 			})
+			.when('/alarm_input', {
+				templateUrl: '/partials/alarm_input.html',
+				controller: 'AlarmInputController'
+			})
 			.when('/admin', {
 				templateUrl: '/partials/admin.html',
 				controller: 'AdminController'
