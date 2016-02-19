@@ -3,7 +3,7 @@ html, body, .view-container, .view-frame, .container-fluid, .container {
 }
 
 body {
-  padding-top: 50px;
+	padding-top: 50px;
 }
 
 h1 {
@@ -12,6 +12,7 @@ h1 {
 }
 
 .row {
+	
 }
 
 .information-root {
@@ -59,8 +60,12 @@ h1 {
 	padding: 50px;
 }
 
-.alarm-telegram-root {
+.alarm-telegram {
 	height: 100%;
+}
+
+.alarm-telegram .panel-body {
+	font-size: 24pt;
 }
 
 .map {
