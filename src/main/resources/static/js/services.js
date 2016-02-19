@@ -2,6 +2,24 @@
 	'use strict';
 	var services = angular.module('idaServices', []);
 
+	services.factory('ida.switchPage', ['$location', function($location) {
+		function switchToPage(page) {
+			$location.path(page);
+		}
+		
+		return {
+			toDashboard: function() {
+				switchToPage("/dashboard");
+			},
+			toAlarmTelegram: function() {
+				switchToPage("/alarm");
+			},
+			toAdmin: function() {
+				switchToPage("/admin");
+			}
+		}
+	}]);
+	
 	services.factory('ida.state', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
 		var information = [];
 		var rooms = [];
@@ -85,7 +103,7 @@
 			}
 		};
 	}]);
-
+	
 	services.factory('ida.mqtt', ['$rootScope', '$location', '$http', function($rootScope, $location, $http) {
 		var connected = false;
 		var pendingSubscriptions = [];
@@ -98,6 +116,7 @@
 			client.onMessageArrived = function(message) {
 				console.log("onMessageArrived " + message.destinationName);
 				$rootScope.$broadcast(message.destinationName, message);
+				$rootScope.$apply();
 			};
 
 			client.onConnectionLost = function(responseObject) {

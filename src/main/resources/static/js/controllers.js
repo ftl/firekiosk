@@ -2,13 +2,13 @@
 	'use strict';
 	var controllers = angular.module('idaControllers', ['ngSanitize']);
 
-	controllers.controller('DashboardController', ['$scope', '$window', '$location', 'ida.remote', 'ida.alarm', function($scope, $window, $location, remote, alarm) {
+	controllers.controller('DashboardController', ['$scope', '$window', '$location', 'ida.remote', 'ida.alarm', 'ida.switchPage', function($scope, $window, $location, remote, alarm, switchPage) {
 		$scope.$on('ida.reloadDashboards', function(event) {
 			$window.location.reload();
 		});
 
-		$scope.$on('ida.alarm.trigger', function(event, telegram) {
-			$location.path("/alarm");
+		$scope.$on('ida.alarm.trigger', function(event) {
+			switchPage.toAlarmTelegram();
 		});
 	}]);
 
@@ -81,7 +81,7 @@
 		setRooms(state.getRooms());
 	}]);
 
-	controllers.controller('AlarmTelegramController', ['$scope', '$location', 'ida.alarm', function($scope, $location, alarm) {
+	controllers.controller('AlarmTelegramController', ['$scope', '$location', '$timeout', 'ida.alarm', 'ida.switchPage', function($scope, $location, $timeout, alarm, switchPage) {
 		var telegram = alarm.current();
 		$scope.keyword = telegram.keyword;
 		$scope.address = telegram.address;
@@ -105,9 +105,8 @@
 			// TODO update view based on telegram
 		});
 		$scope.$on('ida.alarm.reset', function(event) {
-			$location.path("/dashboard");
+			switchPage.toDashboard();
 		});
-
 	}]);
 
 	controllers.controller('AdminController', ['$scope', 'ida.state', 'ida.remote', 'ida.alarm', function($scope, state, remote, alarm) {
