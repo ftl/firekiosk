@@ -78,7 +78,13 @@
 	}]);
 
 	services.factory('ida.alarm', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
-		var alarmTelegram = {};
+		var alarmTelegram = {
+			lat: 49.826302, 
+			lon: 10.735984,
+			keyword: "B4 Person",
+			address: "Steigerwaldstraße 13, Burgebrach",
+			additionalInformation: "laut MT befinden sich noch mehrere Personen im Gebäude"
+		};
 		handle('/ida/alarm/trigger', 'ida.alarm.trigger', function(payload) { alarmTelegram = payload; });
 		handle('/ida/alarm/reset', 'ida.alarm.reset', function() { alarmTelegram = {}; });
 

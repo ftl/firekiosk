@@ -82,31 +82,48 @@
 	}]);
 
 	controllers.controller('AlarmTelegramController', ['$scope', '$location', '$timeout', 'ida.alarm', 'ida.switchPage', function($scope, $location, $timeout, alarm, switchPage) {
-		var telegram = alarm.current();
-		$scope.keyword = telegram.keyword;
-		$scope.address = telegram.address;
-		$scope.additionalInformation = telegram.additionalInformation;
+		var map;
+		var marker;
 
-		if (telegram.lat === undefined || telegram.lon === undefined) {
-			telegram.lat = 49.826302;
-			telegram.lon = 10.735984;
+		function showTelegram(telegram) {		
+			$scope.keyword = telegram.keyword;
+			$scope.address = telegram.address;
+			$scope.additionalInformation = telegram.additionalInformation;
+			
+			if (!(telegram.lat && telegram.lon)) {
+				showMap(49.826302, 10.735984);
+			}
+			else {
+				showMap(telegram.lat, telegram.lon);
+			}
 		}
 
-		var map = L.map('map').setView([telegram.lat, telegram.lon], 17);
-		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 18
-		}).addTo(map);
-		L.tileLayer('http://openfiremap.org/hytiles/{z}/{x}/{y}.png', {
-			maxZoom: 18
-		}).addTo(map);
-		var marker = L.marker([telegram.lat, telegram.lon]).addTo(map);
+		function initMap() {
+			map = L.map('map');
+			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				maxZoom: 18
+			}).addTo(map);
+			L.tileLayer('http://openfiremap.org/hytiles/{z}/{x}/{y}.png', {
+				maxZoom: 17
+			}).addTo(map);
+			marker = L.marker([0, 0]).addTo(map);
+		}
+		
+		function showMap(lat, lon) {
+			var position = L.latLng(lat, lon); 
+			map.setView(position, 17);
+			marker.setLatLng(position).update();
+		}
 
 		$scope.$on('ida.alarm.trigger', function(event, telegram) {
-			// TODO update view based on telegram
+			showTelegram(telegram);
 		});
 		$scope.$on('ida.alarm.reset', function(event) {
 			switchPage.toDashboard();
 		});
+
+		initMap();
+		showTelegram(alarm.current());
 	}]);
 
 	controllers.controller('AdminController', ['$scope', 'ida.state', 'ida.remote', 'ida.alarm', function($scope, state, remote, alarm) {
