@@ -49,7 +49,7 @@
 		};
 
 		$scope.stopPageFlip = function() {
-			if (nextPageFlip === undefined) return;
+			if (!nextPageFlip) return;
 
 			$interval.cancel(nextPageFlip);
 			nextPageFlip = undefined;
@@ -81,38 +81,98 @@
 		setRooms(state.getRooms());
 	}]);
 
-	controllers.controller('AlarmTelegramController', ['$scope', '$location', '$timeout', 'ida.alarm', 'ida.switchPage', function($scope, $location, $timeout, alarm, switchPage) {
+	controllers.controller('AlarmTelegramController', ['$scope', '$http', '$interval', 'ida.alarm', 'ida.switchPage', function($scope, $http, $interval, alarm, switchPage) {
+		var ZOOM_FLIP_DELAY = 15000;
+		var zoomLevels = [17, 14];
+		var currentZoomLevel = 0;
+
 		var map;
 		var marker;
+		var hydrantsLayer;
+		var nextZoomFlip;
 
-		function showTelegram(telegram) {		
+		$scope.mapValid = true;
+
+		function showTelegram(telegram) {
 			$scope.keyword = telegram.keyword;
 			$scope.address = telegram.address;
 			$scope.additionalInformation = telegram.additionalInformation;
-			
-			if (!(telegram.lat && telegram.lon)) {
-				showMap(49.826302, 10.735984);
-			}
-			else {
-				showMap(telegram.lat, telegram.lon);
-			}
+			$scope.mapValid = true;
+
+			showMapByAddress(telegram.address);
 		}
 
 		function initMap() {
-			map = L.map('map');
+			map = L.map('map', {
+				maxZoom: 17,
+				zoom: 15,
+				zoomControl: false,
+				attributionControl: false,
+				fadeAnimation: false,
+				zoomAnimation: false,
+				markerZoomAnimation: false
+			});
 			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 18
 			}).addTo(map);
-			L.tileLayer('http://openfiremap.org/hytiles/{z}/{x}/{y}.png', {
+			hydrantsLayer = L.tileLayer('http://openfiremap.org/hytiles/{z}/{x}/{y}.png', {
 				maxZoom: 17
-			}).addTo(map);
+			});
+			hydrantsLayer.addTo(map);
 			marker = L.marker([0, 0]).addTo(map);
 		}
-		
+
 		function showMap(lat, lon) {
-			var position = L.latLng(lat, lon); 
-			map.setView(position, 17);
+			if (nextZoomFlip) {
+				$interval.cancel(nextZoomFlip);
+				nextZoomFlip = undefined;
+			}
+			currentZoomLevel = 0;
+			var position = L.latLng(lat, lon);
+			map.setView(position, zoomLevels[currentZoomLevel]);
+			hydrantsLayer.addTo(map);
 			marker.setLatLng(position).update();
+			$scope.mapValid = true;
+			nextZoomFlip = $interval(flipZoomLevel, ZOOM_FLIP_DELAY);
+		}
+
+		function showMapByAddress(address) {
+			var encodedAddress = encodeURIComponent(address);
+			console.log("Showing map for " + encodedAddress);
+			$http({
+				method: 'GET',
+				url: 'http://nominatim.openstreetmap.org?q=' + encodedAddress + '&format=json'
+			})
+			.then(
+				function onSuccess(response) {
+					console.log("Found address");
+					console.log(response.data);
+					if (response.data.length === 0) {
+						$scope.mapValid = false;
+						return;
+					}
+
+					var lat = Number(response.data[0].lat);
+					var lon = Number(response.data[0].lon);
+
+					showMap(lat, lon);
+				},
+				function onError(response) {
+					console.log("Cannot find address");
+					console.log(response);
+					$scope.mapValid = false;
+				}
+			);
+		}
+
+		function flipZoomLevel() {
+			currentZoomLevel = (currentZoomLevel + 1) % zoomLevels.length;
+			if (currentZoomLevel === 0) {
+				hydrantsLayer.addTo(map);
+			} else {
+				map.removeLayer(hydrantsLayer);
+			}
+			map.setZoom(zoomLevels[currentZoomLevel]);
 		}
 
 		$scope.$on('ida.alarm.trigger', function(event, telegram) {
@@ -121,25 +181,31 @@
 		$scope.$on('ida.alarm.reset', function(event) {
 			switchPage.toDashboard();
 		});
+		$scope.$on('destroy', function() {
+			$interval.cancel(nextZoomFlip);
+			map.remove();
+		});
 
 		initMap();
 		showTelegram(alarm.current());
 	}]);
-	
+
 	controllers.controller('AlarmInputController', ['$scope', 'ida.switchPage', 'ida.alarm', function($scope, switchPage, alarm) {
 		$scope.keyword = "";
 		$scope.address = "";
 		$scope.additionalInformation = "";
-		
+
 		$scope.triggerAlarm = function() {
-			alarm.triggerAlarm({ 
-				keyword: $scope.keyword, 
-				address: $scope.address, 
-				additionalInformation: $scope.additionalInformation 
+			alarm.triggerAlarm({
+				keyword: $scope.keyword,
+				address: $scope.address,
+				additionalInformation: $scope.additionalInformation
 			});
-			switchPage.toAdmin();
+			// switchPage.toAdmin();
 		};
-		
+		$scope.resetAlarm = function() {
+			alarm.resetAlarm();
+		};
 		$scope.cancel = function() {
 			switchPage.toAdmin();
 		};
@@ -184,7 +250,6 @@
 		};
 
 		$scope.triggerAlarm = function() {
-//			alarm.triggerAlarm({lat: 49.826302, lon: 10.735984, keyword: "B4 Person", address: "Steigerwaldstraße 13, Burgebrach", additionalInformation: ""});
 			switchPage.toAlarmInput();
 		};
 

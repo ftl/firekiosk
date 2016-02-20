@@ -7,7 +7,7 @@
 			console.log("Switch to " + page);
 			$location.path(page);
 		}
-		
+
 		return {
 			toDashboard: function() {
 				switchToPage("/dashboard");
@@ -16,14 +16,14 @@
 				switchToPage("/alarm");
 			},
 			toAlarmInput: function() {
-				switchToPage("/alarm_input")
+				switchToPage("/alarm_input");
 			},
 			toAdmin: function() {
 				switchToPage("/admin");
 			}
-		}
+		};
 	}]);
-	
+
 	services.factory('ida.state', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
 		var information = [];
 		var rooms = [];
@@ -83,7 +83,7 @@
 
 	services.factory('ida.alarm', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
 		var alarmTelegram = {
-			lat: 49.826302, 
+			lat: 49.826302,
 			lon: 10.735984,
 			keyword: "B4 Person",
 			address: "Steigerwaldstraße 13, Burgebrach",
@@ -113,7 +113,7 @@
 			}
 		};
 	}]);
-	
+
 	services.factory('ida.mqtt', ['$rootScope', '$location', '$http', function($rootScope, $location, $http) {
 		var connected = false;
 		var pendingSubscriptions = [];

@@ -1,7 +1,10 @@
 <div class="container-fluid">
 	<div class="row alarm-telegram">
 		<div class="col-md-4">
-			<h1 class="panel panel-default" ng-bind="keyword"></h1>
+			<div class="panel panel-default">
+				<div class="panel-heading">Schlagwort</div>
+				<div class="panel-body" ng-bind="keyword"></div>
+			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">Adresse</div>
 				<div class="panel-body" ng-bind="address"></div>
@@ -11,6 +14,13 @@
 				<div class="panel-body" ng-bind="additionalInformation"></div>
 			</div>
 		</div>
-		<div class="map col-md-8" id="map"></div>
+		<div class="map col-md-8">
+			<div class="panel panel-default" style="height: 95%;">
+				<div class="map panel-body">
+					<div class="map" id="map" ng-show="mapValid"></div>
+					<div ng-hide="mapValid">Keine Kartendaten gefunden.</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
