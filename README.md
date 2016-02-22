@@ -1,1 +1,1 @@
-#iot-dashboard
+#firekiosk

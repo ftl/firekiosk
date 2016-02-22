@@ -30,7 +30,7 @@ dependencies {
 
 jar {
 	manifest {
-		attributes 'Implementation-Title': 'IoT-Dashboard',
+		attributes 'Implementation-Title': 'firekiosk',
 			'Implementation-Version': version
 	}
 }
