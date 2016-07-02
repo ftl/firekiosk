@@ -12,12 +12,16 @@ apply plugin: 'spring-boot'
 
 version = '0.0.1-SNAPSHOT'
 
+sourceCompatibility = '1.8'
+
 repositories {
     jcenter()
 }
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile 'org.firebirdsql.jdbc:jaybird-jdk18:2.2.10'
+
 	compile 'org.webjars:bootstrap:3.3.6'
 	compile 'org.webjars:jquery:2.2.0'
 	compile 'org.webjars:angularjs:1.4.9'
