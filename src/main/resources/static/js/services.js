@@ -1,8 +1,8 @@
 (function() {
 	'use strict';
-	var services = angular.module('idaServices', []);
+	var services = angular.module('firekioskServices', []);
 
-	services.factory('ida.switchPage', ['$location', function($location) {
+	services.factory('firekiosk.switchPage', ['$location', function($location) {
 		function switchToPage(page) {
 			console.log("Switch to " + page);
 			$location.path(page);
@@ -10,7 +10,7 @@
 
 		return {
 			toDashboard: function() {
-				switchToPage("/dashboard");
+				switchToPage("/kiosk");
 			},
 			toAlarmTelegram: function() {
 				switchToPage("/alarm");
@@ -24,12 +24,12 @@
 		};
 	}]);
 
-	services.factory('ida.state', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
+	services.factory('firekiosk.state', ['$rootScope', 'firekiosk.mqtt', function($rootScope, mqtt) {
 		var information = [];
 		var rooms = [];
 
-		handle('/ida/information', 'state.information', function(payload) { information = payload; });
-		handle('/ida/rooms', 'state.rooms', function(payload) { rooms = payload; });
+		handle('/firekiosk/information', 'state.information', function(payload) { information = payload; });
+		handle('/firekiosk/rooms', 'state.rooms', function(payload) { rooms = payload; });
 
 		function handle(destinationPath, name, callback) {
 			mqtt.subscribe(destinationPath);
@@ -50,13 +50,13 @@
 
 		return {
 			setInformation: function(information) {
-				setRetained('/ida/information', information);
+				setRetained('/firekiosk/information', information);
 			},
 			getInformation: function() {
 				return information;
 			},
 			setRooms: function(rooms) {
-				setRetained('/ida/rooms', rooms);
+				setRetained('/firekiosk/rooms', rooms);
 			},
 			getRooms: function() {
 				return rooms;
@@ -64,8 +64,8 @@
 		};
 	}]);
 
-	services.factory('ida.remote', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
-		handle('/ida/remote/reloadDashboards', 'ida.reloadDashboards');
+	services.factory('firekiosk.remote', ['$rootScope', 'firekiosk.mqtt', function($rootScope, mqtt) {
+		handle('/firekiosk/remote/reloadKiosk', 'firekiosk.reloadKiosk');
 
 		function handle(destinationPath, name) {
 			mqtt.subscribe(destinationPath);
@@ -76,12 +76,12 @@
 
 		return {
 			reloadDashboards: function() {
-				mqtt.send('/ida/remote/reloadDashboards', JSON.stringify(Date.now()));
+				mqtt.send('/firekiosk/remote/reloadKiosk', JSON.stringify(Date.now()));
 			}
 		};
 	}]);
 
-	services.factory('ida.alarm', ['$rootScope', 'ida.mqtt', function($rootScope, mqtt) {
+	services.factory('firekiosk.alarm', ['$rootScope', 'firekiosk.mqtt', function($rootScope, mqtt) {
 		var alarmTelegram = {
 			lat: 49.826302,
 			lon: 10.735984,
@@ -89,8 +89,8 @@
 			address: "Steigerwaldstraße 13, Burgebrach",
 			additionalInformation: "laut MT befinden sich noch mehrere Personen im Gebäude"
 		};
-		handle('/ida/alarm/trigger', 'ida.alarm.trigger', function(payload) { alarmTelegram = payload; });
-		handle('/ida/alarm/reset', 'ida.alarm.reset', function() { alarmTelegram = {}; });
+		handle('/firekiosk/alarm/trigger', 'firekiosk.alarm.trigger', function(payload) { alarmTelegram = payload; });
+		handle('/firekiosk/alarm/reset', 'firekiosk.alarm.reset', function() { alarmTelegram = {}; });
 
 		function handle(destinationPath, name, callback) {
 			mqtt.subscribe(destinationPath);
@@ -106,22 +106,22 @@
 				return alarmTelegram;
 			},
 			triggerAlarm: function(telegram) {
-				mqtt.send('/ida/alarm/trigger', JSON.stringify(telegram));
+				mqtt.send('/firekiosk/alarm/trigger', JSON.stringify(telegram));
 			},
 			resetAlarm: function() {
-				mqtt.send('/ida/alarm/reset', JSON.stringify(Date.now()));
+				mqtt.send('/firekiosk/alarm/reset', JSON.stringify(Date.now()));
 			}
 		};
 	}]);
 
-	services.factory('ida.mqtt', ['$rootScope', '$location', '$http', function($rootScope, $location, $http) {
+	services.factory('firekiosk.mqtt', ['$rootScope', '$location', '$http', function($rootScope, $location, $http) {
 		var connected = false;
 		var pendingSubscriptions = [];
 		var pahoClient;
 
 		function connect(hostname, port, path) {
 			console.log("Connecting to MQTT broker on " + hostname + " port " + port + " path " + path);
-			var client = new Paho.MQTT.Client(hostname, Number(port), path, "ida" + Date.now());
+			var client = new Paho.MQTT.Client(hostname, Number(port), path, "firekiosk_" + Date.now());
 
 			client.onMessageArrived = function(message) {
 				console.log("onMessageArrived " + message.destinationName);
@@ -178,7 +178,7 @@
 			function onError(response) {
 				console.log("Cannot find mqtt.conf, using defaults.");
 				console.log(response);
-				pahoClient = connect($location.host(), 18830, "/iotDashboard");
+				pahoClient = connect($location.host(), 18830, "/firekiosk");
 			}
 		);
 

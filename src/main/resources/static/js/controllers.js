@@ -1,18 +1,18 @@
 (function() {
 	'use strict';
-	var controllers = angular.module('idaControllers', ['ngSanitize']);
+	var controllers = angular.module('firekioskControllers', ['ngSanitize']);
 
-	controllers.controller('DashboardController', ['$scope', '$window', '$location', 'ida.remote', 'ida.alarm', 'ida.switchPage', function($scope, $window, $location, remote, alarm, switchPage) {
-		$scope.$on('ida.reloadDashboards', function(event) {
+	controllers.controller('KioskController', ['$scope', '$window', '$location', 'firekiosk.remote', 'firekiosk.alarm', 'firekiosk.switchPage', function($scope, $window, $location, remote, alarm, switchPage) {
+		$scope.$on('ida.reloadKiosk', function(event) {
 			$window.location.reload();
 		});
 
-		$scope.$on('ida.alarm.trigger', function(event) {
+		$scope.$on('firekiosk.alarm.trigger', function(event) {
 			switchPage.toAlarmTelegram();
 		});
 	}]);
 
-	controllers.controller('InformationDashboardController', ['$scope', '$interval', 'ida.state', function($scope, $interval, state) {
+	controllers.controller('InformationKioskController', ['$scope', '$interval', 'firekiosk.state', function($scope, $interval, state) {
 		var PAGE_FLIP_DELAY = 10000;
 		var nextPageFlip;
 
@@ -63,7 +63,7 @@
 		setInformation(state.getInformation());
 	}]);
 
-	controllers.controller('RoomScheduleController', ['$scope', 'ida.state', function($scope, state) {
+	controllers.controller('RoomScheduleController', ['$scope', 'firekiosk.state', function($scope, state) {
 		$scope.rooms = [];
 
 		function setRooms(rooms) {
@@ -81,7 +81,7 @@
 		setRooms(state.getRooms());
 	}]);
 
-	controllers.controller('AlarmTelegramController', ['$scope', '$http', '$interval', 'ida.alarm', 'ida.switchPage', function($scope, $http, $interval, alarm, switchPage) {
+	controllers.controller('AlarmTelegramController', ['$scope', '$http', '$interval', 'firekiosk.alarm', 'firekiosk.switchPage', function($scope, $http, $interval, alarm, switchPage) {
 		var ZOOM_FLIP_DELAY = 15000;
 		var zoomLevels = [17, 14];
 		var currentZoomLevel = 0;
@@ -175,10 +175,10 @@
 			map.setZoom(zoomLevels[currentZoomLevel]);
 		}
 
-		$scope.$on('ida.alarm.trigger', function(event, telegram) {
+		$scope.$on('firekiosk.alarm.trigger', function(event, telegram) {
 			showTelegram(telegram);
 		});
-		$scope.$on('ida.alarm.reset', function(event) {
+		$scope.$on('firekiosk.alarm.reset', function(event) {
 			switchPage.toDashboard();
 		});
 		$scope.$on('destroy', function() {
@@ -190,7 +190,7 @@
 		showTelegram(alarm.current());
 	}]);
 
-	controllers.controller('AlarmInputController', ['$scope', 'ida.switchPage', 'ida.alarm', function($scope, switchPage, alarm) {
+	controllers.controller('AlarmInputController', ['$scope', 'firekiosk.switchPage', 'firekiosk.alarm', function($scope, switchPage, alarm) {
 		$scope.keyword = "";
 		$scope.address = "";
 		$scope.additionalInformation = "";
@@ -211,7 +211,7 @@
 		};
 	}]);
 
-	controllers.controller('AdminController', ['$scope', 'ida.switchPage', 'ida.state', 'ida.remote', 'ida.alarm', function($scope, switchPage, state, remote, alarm) {
+	controllers.controller('AdminController', ['$scope', 'firekiosk.switchPage', 'firekiosk.state', 'firekiosk.remote', 'firekiosk.alarm', function($scope, switchPage, state, remote, alarm) {
 		$scope.information = "";
 		$scope.room1 = "";
 		$scope.room2 = "";

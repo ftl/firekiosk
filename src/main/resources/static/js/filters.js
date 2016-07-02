@@ -1,6 +1,6 @@
 (function() {
 	'use strict';
-	var filters = angular.module('idaFilters', []);
+	var filters = angular.module('firekioskFilters', []);
 	
 	filters.filter('page', function() {
 		return function(input, pageIndex, pageSize) {

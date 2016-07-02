@@ -1,18 +1,18 @@
 (function() {
 	'use strict';
-	var app = angular.module('iotDashboardApp', [
+	var app = angular.module('firekioskApp', [
 	                                             'ngRoute',
 	                                             'ds.clock',
-	                                             'idaControllers',
-	                                             'idaFilters',
-	                                             'idaServices'
+	                                             'firekioskControllers',
+	                                             'firekioskFilters',
+	                                             'firekioskServices'
 	                                        ]);
 
 	app.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
-			.when('/dashboard', {
-				templateUrl: '/partials/dashboard.html',
-				controller: 'DashboardController'
+			.when('/kiosk', {
+				templateUrl: '/partials/kiosk.html',
+				controller: 'KioskController'
 			})
 			.when('/alarm', {
 				templateUrl: '/partials/alarm_telegram.html',
@@ -27,7 +27,7 @@
 				controller: 'AdminController'
 			})
 			.otherwise({
-				redirectTo: '/dashboard'
+				redirectTo: '/kiosk'
 	   		});
 	   }]);	
 })();
