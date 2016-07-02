@@ -4,20 +4,10 @@ public class Birthday {
 
 	private String id;
 	private String name;
-	private String date;
+	private String dateOfBirth;
 	private int month;
+	private int day;
 	private int age;
-
-	public Birthday() {
-	}
-
-	public Birthday(final String id, final String name, final String date, final int month, final int age) {
-		this.id = id;
-		this.name = name;
-		this.date = date;
-		this.month = month;
-		this.age = age;
-	}
 
 	public String getId() {
 		return id;
@@ -35,12 +25,12 @@ public class Birthday {
 		this.name = name;
 	}
 
-	public String getDate() {
-		return date;
+	public String getDateOfBirth() {
+		return dateOfBirth;
 	}
 
-	public void setDate(final String date) {
-		this.date = date;
+	public void setDateOfBirth(final String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	public int getMonth() {
@@ -49,6 +39,14 @@ public class Birthday {
 
 	public void setMonth(final int month) {
 		this.month = month;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public void setDay(final int day) {
+		this.day = day;
 	}
 
 	public int getAge() {

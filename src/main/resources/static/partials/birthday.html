@@ -1,0 +1,16 @@
+<div class="container-fluid">
+	<h1>Geburtstage</h1>
+	<div ng-controller="BirthdayListController">
+		<form>
+		<input type="checkbox" ng-model="filterSpecialBirthdays"></input> nur runde Geburtstage
+		</form>
+		<div ng-repeat="month in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">
+		<h2 ng-bind="monthNames[month - 1]"></h2>
+		<ul>
+			<li ng-repeat="birthday in birthdays[month] | filter:specialBirthday">
+				{{birthday.day}}.{{birthday.month}}: <a title="{{birthday.id}}">{{birthday.name}}</a> ({{birthday.age}})
+			</li>
+		</ul>
+		</div>
+	</div>
+</div>

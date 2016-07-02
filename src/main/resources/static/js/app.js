@@ -5,11 +5,16 @@
 	                                             'ds.clock',
 	                                             'firekioskControllers',
 	                                             'firekioskFilters',
-	                                             'firekioskServices'
+	                                             'firekioskServices',
+	                                             'firekioskBirthday'
 	                                        ]);
 
 	app.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
+			.when('/birthday', {
+				templateUrl: '/partials/birthday.html',
+				controller: 'BirthdayListController'
+			})
 			.when('/kiosk', {
 				templateUrl: '/partials/kiosk.html',
 				controller: 'KioskController'
@@ -27,7 +32,7 @@
 				controller: 'AdminController'
 			})
 			.otherwise({
-				redirectTo: '/kiosk'
+				redirectTo: '/birthday'
 	   		});
 	   }]);	
 })();

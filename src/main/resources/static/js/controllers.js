@@ -3,7 +3,7 @@
 	var controllers = angular.module('firekioskControllers', ['ngSanitize']);
 
 	controllers.controller('KioskController', ['$scope', '$window', '$location', 'firekiosk.remote', 'firekiosk.alarm', 'firekiosk.switchPage', function($scope, $window, $location, remote, alarm, switchPage) {
-		$scope.$on('ida.reloadKiosk', function(event) {
+		$scope.$on('firekiosk.reloadKiosk', function(event) {
 			$window.location.reload();
 		});
 

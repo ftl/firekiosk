@@ -24,7 +24,7 @@ public class Controller {
 	@RequestMapping("/api/birthdays")
 	public List<Birthday> getAll() {
 		final List<Birthday> allBirthdays = jdbcTemplate.query(
-				"select MIG_NR, MIG_VORNAME, MIG_NACHNAME, MIG_GEB_DAT, EXTRACT(MONTH from MIG_GEB_DAT) as \"MONTH\", EXTRACT(DAY from MIG_GEB_DAT) as \"DAY\" from MIG_STAMM "
+				"select MIG_ID, MIG_VORNAME, MIG_NACHNAME, MIG_GEB_DAT, EXTRACT(MONTH from MIG_GEB_DAT) as \"MONTH\", EXTRACT(DAY from MIG_GEB_DAT) as \"DAY\" from MIG_STAMM "
 						+ "where MIG_ABT_INDEX = ? and MIG_AKTIV_BD is null order by \"MONTH\", \"DAY\"",
 				new Object[] { abtIndex }, this::toBirthday);
 		return allBirthdays;
@@ -32,13 +32,14 @@ public class Controller {
 
 	public Birthday toBirthday(final ResultSet rs, final int rowNum) throws SQLException {
 		final Birthday birthday = new Birthday();
-		birthday.setId(rs.getString("MIG_NR"));
+		birthday.setId(rs.getString("MIG_ID"));
 		birthday.setName(rs.getString("MIG_VORNAME") + " " + rs.getString("MIG_NACHNAME"));
 
 		final LocalDate birthdate = asLocalDate(rs.getDate("MIG_GEB_DAT"));
 		if (birthdate != null) {
-			birthday.setDate(birthdate.toString());
+			birthday.setDateOfBirth(birthdate.toString());
 			birthday.setMonth(birthdate.getMonth().getValue());
+			birthday.setDay(birthdate.getDayOfMonth());
 			birthday.setAge(ageOf(birthdate));
 		}
 
