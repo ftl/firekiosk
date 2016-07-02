@@ -20,6 +20,8 @@ repositories {
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile('org.springframework.boot:spring-boot-starter-jdbc')
+	compile('org.springframework:spring-jdbc')
 	compile 'org.firebirdsql.jdbc:jaybird-jdk18:2.2.10'
 
 	compile 'org.webjars:bootstrap:3.3.6'
