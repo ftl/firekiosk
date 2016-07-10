@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class Controller {
+public class BirthdaysController {
 
 	@Value("${firekiosk.abt_index}")
 	private String abtIndex;
@@ -32,8 +32,8 @@ public class Controller {
 
 	public Birthday toBirthday(final ResultSet rs, final int rowNum) throws SQLException {
 		final Birthday birthday = new Birthday();
-		birthday.setId(rs.getString("MIG_ID"));
-		birthday.setName(rs.getString("MIG_VORNAME") + " " + rs.getString("MIG_NACHNAME"));
+		birthday.setId(rs.getString("MIG_ID").trim());
+		birthday.setName(String.join(" ", rs.getString("MIG_VORNAME"), rs.getString("MIG_NACHNAME")));
 
 		final LocalDate birthdate = asLocalDate(rs.getDate("MIG_GEB_DAT"));
 		if (birthdate != null) {
