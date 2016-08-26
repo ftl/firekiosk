@@ -26,11 +26,11 @@ public class BirthdaysController {
 		final List<Birthday> allBirthdays = jdbcTemplate.query(
 				"select MIG_ID, MIG_VORNAME, MIG_NACHNAME, MIG_GEB_DAT, EXTRACT(MONTH from MIG_GEB_DAT) as \"MONTH\", EXTRACT(DAY from MIG_GEB_DAT) as \"DAY\" from MIG_STAMM "
 						+ "where MIG_ABT_INDEX = ? and MIG_AKTIV_BD is null order by \"MONTH\", \"DAY\"",
-				new Object[] { abtIndex }, this::toBirthday);
+				new Object[] { abtIndex }, BirthdaysController::toBirthday);
 		return allBirthdays;
 	}
 
-	public Birthday toBirthday(final ResultSet rs, final int rowNum) throws SQLException {
+	private static Birthday toBirthday(final ResultSet rs, final int rowNum) throws SQLException {
 		final Birthday birthday = new Birthday();
 		birthday.setId(rs.getString("MIG_ID").trim());
 		birthday.setName(String.join(" ", rs.getString("MIG_VORNAME"), rs.getString("MIG_NACHNAME")));
