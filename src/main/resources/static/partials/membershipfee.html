@@ -1,0 +1,43 @@
+<div class="container-fluid">
+	<div ng-controller="MembershipFeeController">
+		<h1>SEPA Lastschrift</h1>
+		<form>
+			<div class="form-group">
+				<label for="collectionDate">Einzug am (JJJJ-MM-TT):</label>
+				<input id="collectionDate" type="text" class="form-control" ng-model="collectionDate"></input>
+			</div>
+			<div class="form-group">
+				<label for="debitText">Betreff:</label>
+				<input id="debitText" type="text" class="form-control" ng-model="debitText"></input>
+			</div>
+			<button type="submit" class="btn btn-primary" ng-click='refreshLiableMembers()'>Liste aktualisieren</button>
+			<a class="btn btn-default" target="_blank" ng-href="api/liableMembers/sepa?collectionDate={{collectionDate}}&debitText={{debitText}}">SEPA XML-Datei</a>
+		</form>
+		
+		<h1>Beitragspflichtige Mitglieder</h1>
+		<table class="liableMembers">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Alter</th>
+					<th>Beitrag</th>
+					<th>Mandatsref.</th>
+					<th>Kontoinhaber</th>
+					<th>IBAN</th>
+					<th>BIC</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="member in liableMembers">
+					<td><a title="{{member.id}}">{{member.name}}</a></td>
+					<td>{{member.age}}</td>
+					<td class="money">{{member.membershipFee | money}}</td>
+					<td>{{member.sepaMandateId}}</td>
+					<td>{{member.accountName}}</td>
+					<td>{{member.iban | iban}}</td>
+					<td>{{member.bic}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

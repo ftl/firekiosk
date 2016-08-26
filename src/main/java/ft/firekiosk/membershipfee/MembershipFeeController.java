@@ -8,6 +8,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -67,7 +68,7 @@ public class MembershipFeeController {
 						+ "where MIG_ABT_INDEX = ? and MIG_AKTIV_BD is null and MIG_GEB_DAT is not null and MIG_BEITRAG_ART is not null and MIG_BEITRAG is not null "
 						+ "order by MIG_NACHNAME, MIG_VORNAME, MIG_GEB_DAT",
 				new Object[] { abtIndex }, (rs, rowNum) -> toLiableMember(rs, rowNum, collectionDate));
-		return liableMembers;
+		return liableMembers.stream().filter((m) -> m.getAge() > 17 && m.getAge() < 61).collect(Collectors.toList());
 	}
 
 	private static LiableMember toLiableMember(final ResultSet rs, final int rowNum, final LocalDate collectionDate)

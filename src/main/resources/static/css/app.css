@@ -34,3 +34,11 @@ body {
     padding-left: 40px;
   }
 }
+
+.liableMembers th,td {
+	padding-right: 2em;
+}
+
+.money {
+	text-align: right;
+}
