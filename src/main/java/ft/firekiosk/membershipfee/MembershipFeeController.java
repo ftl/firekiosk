@@ -79,7 +79,11 @@ public class MembershipFeeController {
 		member.setAge(ageOf(asLocalDate(rs.getDate("MIG_GEB_DAT")), collectionDate));
 		member.setAccountName(rs.getString("MIG_KONTOINHABER").trim());
 		member.setIban(rs.getString("MIG_IBAN").trim());
-		member.setBic(rs.getString("MIG_BIC").trim());
+		if (rs.getString("MIG_BIC") != null) {
+			member.setBic(rs.getString("MIG_BIC").trim());
+		} else {
+			member.setBic("");
+		}
 		member.setSepaMandateId(rs.getString("MIG_MANDAT_REF").trim());
 		member.setSepaMandateDate(asLocalDate(rs.getDate("MIG_MANDAT_VD")));
 		member.setMembershipFee(asAmountOfMoney(rs.getString("MIG_BEITRAG").trim()));
