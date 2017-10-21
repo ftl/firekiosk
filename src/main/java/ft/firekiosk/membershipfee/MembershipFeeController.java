@@ -95,7 +95,7 @@ public class MembershipFeeController {
 	}
 
 	private static int asAmountOfMoney(final String value) {
-		final String withoutSeparator = value.replace(",", "");
+		final String withoutSeparator = value.replace(",", "").replace(".", "");
 		try {
 			return Integer.parseInt(withoutSeparator);
 		} catch (final NumberFormatException e) {
